@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iGCSE Geography Retrieval Practice</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+    header {
+      background-color: #0070c0;
+      color: #fff;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    /* Style for the Bolton School logo */
+    .school-logo {
+      height: 60px;
+      margin-right: 1rem;
+      cursor: pointer;
+    }
+
+    /* Style for the decorative globe logo */
+    .decor-logo {
+      height: 60px;
+      margin-left: 1rem;
+    }
+
+    /* Container for the heading text to keep margins consistent */
+    .header-text h1,
+    .header-text p {
+      margin: 0;
+      text-align: center;
+    }
+    .container {
+      display: flex;
+      flex-direction: row;
+      min-height: 100vh;
+    }
+    .topics {
+      width: 250px;
+      background-color: #e6eef8;
+      border-right: 1px solid #ccc;
+      padding: 1rem;
+      box-sizing: border-box;
+    }
+    .topics h2 {
+      margin-top: 0;
+    }
+    .topics ul {
+      list-style: none;
+      padding: 0;
+    }
+    .topics li {
+      margin-bottom: 0.5rem;
+      padding: 0.5rem;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .topics li:hover {
+      background-color: #d0e4f7;
+    }
+    .content {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+    .question-card {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    .question-card p.question {
+      margin: 0 0 0.5rem 0;
+      font-weight: bold;
+    }
+    .question-card input[type="text"] {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .question-card textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: vertical;
+      font-family: inherit;
+    }
+    .question-card button {
+      background-color: #0070c0;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-bottom: 0.5rem;
+      margin-right: 0.5rem;
+    }
+    .question-card button:hover {
+      background-color: #005a9e;
+    }
+    .answer {
+      display: none;
+      margin-top: 0.5rem;
+      background-color: #f9f9f9;
+      padding: 0.5rem;
+      border-left: 3px solid #0070c0;
+    }
+
+    /* Feedback styling. Colours are set dynamically based on correctness. */
+    .feedback {
+      display: none;
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      border-left: 4px solid transparent;
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <!-- Added Bolton School logo (provided by user) and decorative globe logo -->
+    <img src="images.png" alt="Bolton School Logo" class="school-logo" id="homeLogo">
+    <div class="header-text">
+      <h1>iGCSE Geography Retrieval Practice</h1>
+      <p>Select a topic to begin practising short‑answer questions.</p>
+    </div>
+    <img src="globe_logo.png" alt="Globe Decorative Logo" class="decor-logo">
+  </header>
+  <div class="container">
+    <nav class="topics">
+      <h2>Topics</h2>
+      <ul id="topicList">
+        <!-- Topics will be populated by JavaScript -->
+      </ul>
+    </nav>
+    <main class="content">
+      <div id="questionsContainer">
+        <p>Please select a topic from the left to view questions.</p>
+      </div>
+    </main>
+  </div>
+  <script>
+    // Data structure containing topics and their questions/answers
+    const data = {
+      "River environments": [
+        {
+          question: "Explain why the hydrological cycle is considered a closed system and name two stores and two transfers.",
+          answer: "The hydrological cycle is a closed system because the total amount of water on Earth remains constant – water is simply recycled through different states. Water moves between stores such as oceans, rivers, glaciers and the atmosphere. Transfers include processes like evaporation and transpiration that move water into the atmosphere, and condensation and precipitation that return it to the land and sea."
+        },
+        {
+          question: "Describe how the river’s long profile and cross‑section change from the upper course to the lower course.",
+          answer: "In the upper course rivers flow down steep gradients in narrow V‑shaped valleys with interlocking spurs. The channel is shallow and rocky. In the middle course the gradient decreases, the valley widens and becomes U‑shaped, and meanders develop with wider, deeper channels. By the lower course the river flows over a gentle gradient in a broad floodplain with wide, deep channels, large meanders and features like oxbow lakes and levees."
+        },
+        {
+          question: "Define erosion, transportation and deposition in a river context and give one example of each.",
+          answer: "Erosion is the wearing away of the river bed and banks through processes such as hydraulic action and abrasion. Transportation refers to the movement of eroded material downstream via solution, suspension, saltation and traction. Deposition occurs when the river loses energy and drops its load, forming features such as point bars on the inside of meander bends or floodplain deposits during high discharge."
+        },
+        {
+          question: "List three factors that can cause changes in river regimes and explain their influence on discharge.",
+          answer: "Factors include variations in precipitation – storm events or seasonal changes like monsoon rains increase discharge, while drought reduces it. Temperature influences snowmelt and evapotranspiration; melting snow in spring can cause high flows. Land use and vegetation affect infiltration and runoff – urbanisation and deforestation increase surface runoff and peak discharge, while dense vegetation slows runoff. Human activities such as dam construction or water abstraction can regulate or reduce discharge."
+        },
+        {
+          question: "Identify two human uses of rivers and explain why sustainable management is important.",
+          answer: "Humans use rivers for agriculture (irrigation), industry (cooling and processing), domestic water supply, transportation, hydroelectric power and recreation. Sustainable management is important to ensure water quality, maintain ecosystems, prevent over‑extraction and pollution, and reduce flood risks so that these uses can continue without degrading the river environment."
+        }
+      ],
+      "Coastal environments": [
+        {
+          question: "Explain the difference between constructive and destructive waves and how each affects a beach.",
+          answer: "Constructive waves have a long wavelength and low height; their strong swash carries material up the beach and weak backwash leaves it there, building up gentle beach profiles. Destructive waves are steep, high‑energy waves with a powerful backwash that erodes and removes material, steepening and narrowing the beach."
+        },
+        {
+          question: "Describe two erosional and two depositional coastal landforms and the processes that create them.",
+          answer: "Erosional landforms include headlands and bays, which form where bands of hard and soft rock are eroded at different rates, and wave‑cut platforms created as cliffs retreat due to undercutting. Depositional landforms include beaches formed by the accumulation of sand and shingle, and spits formed when longshore drift transports material along the coast and deposits it where the coastline changes direction."
+        },
+        {
+          question: "What are the main threats facing coastal ecosystems such as mangroves and coral reefs?",
+          answer: "Coastal ecosystems face threats from pollution, overfishing, and coastal development such as ports and tourism infrastructure. Climate change causes sea‑level rise, warmer sea temperatures and ocean acidification, which can damage coral reefs and drown mangroves. These pressures reduce biodiversity and the natural protection these ecosystems provide."
+        },
+        {
+          question: "Compare hard engineering and soft engineering strategies for coastal management and give one example of each.",
+          answer: "Hard engineering uses built structures to resist the force of the sea, such as sea walls, groynes, revetments and gabions. They provide immediate protection but are expensive and can disrupt natural processes. Soft engineering works with natural processes and includes beach nourishment, dune stabilisation, and managed retreat. It is usually cheaper and more environmentally friendly but may require ongoing maintenance."
+        },
+        {
+          question: "Identify two causes of coastal flooding and one method used to predict or prevent it.",
+          answer: "Causes of coastal flooding include storm surges from tropical cyclones or low pressure systems, tsunamis triggered by undersea earthquakes, sea‑level rise and land subsidence. Prediction methods include storm surge forecasting and tsunami early‑warning systems. Prevention measures include building coastal defences such as sea walls, restoring mangroves, implementing setback zones and raising public awareness."
+        }
+      ],
+      "Hazardous environments": [
+        {
+          question: "What conditions are necessary for a tropical cyclone to form?",
+          answer: "Tropical cyclones form over warm ocean waters of about 26 °C or higher where the air is humid. Low wind shear allows convection to organise, and the Coriolis effect provides the rotation. A disturbance such as a tropical wave triggers rising air and the system develops if conditions remain favourable."
+        },
+        {
+          question: "Explain how plate tectonics cause earthquakes and volcanoes.",
+          answer: "At plate boundaries stress builds up as plates move past, collide or separate. When the stress is released it sends shock waves through the crust, causing earthquakes. Volcanoes form where magma rises to the surface at divergent boundaries, subduction zones or hotspots. As plates diverge or one plate is forced beneath another, melting of mantle rock produces magma that can erupt at the surface."
+        },
+        {
+          question: "Why might people choose to live in areas at risk from natural hazards?",
+          answer: "People may live in hazardous areas because of fertile soils near volcanoes that support agriculture, employment in tourism or mining, cultural or family ties, and economic opportunities in coastal regions. In some cases they may have limited alternatives or rely on hazard mitigation measures such as defences and early warnings, making the risk seem acceptable."
+        },
+        {
+          question: "Describe one short‑term and one long‑term impact of an earthquake.",
+          answer: "Short‑term impacts include loss of life and injuries, destruction of homes and infrastructure, and disruption of basic services. Long‑term impacts include economic losses from rebuilding, displacement of communities, psychological trauma, and long‑lasting damage to the economy and environment."
+        },
+        {
+          question: "Outline three methods used to prepare for earthquakes.",
+          answer: "Preparation methods include establishing early warning systems and evacuation plans; enforcing building codes and using earthquake‑resistant designs to reduce damage; and educating the public through drills and emergency training so people know how to respond when a quake occurs."
+        }
+      ],
+      "Economic activity and energy": [
+        {
+          question: "Distinguish between primary, secondary, tertiary and quaternary sectors and give an example of each.",
+          answer: "The primary sector extracts raw materials (e.g., farming, fishing or mining). The secondary sector manufactures or processes these materials (e.g., car production or food processing). The tertiary sector provides services (e.g., retail, healthcare and education). The quaternary sector involves knowledge‑based services such as research, information technology and consultancy."
+        },
+        {
+          question: "According to the Clark–Fisher model, how do employment structures change as countries develop?",
+          answer: "In pre‑industrial economies most people work in the primary sector. During industrialisation employment shifts to the secondary sector. As economies mature, the tertiary sector grows rapidly and dominates employment. In post‑industrial economies the quaternary sector becomes increasingly important."
+        },
+        {
+          question: "Describe two factors that influence where industries locate.",
+          answer: "Key factors include access to raw materials, energy supply and water, availability of labour, proximity to markets, transport links, land costs, and government incentives. For example, heavy industries often locate near raw materials and transport routes, while high‑tech firms may cluster near universities and skilled labour."
+        },
+        {
+          question: "What are two positive and two negative impacts of changes in economic sectors?",
+          answer: "Positive impacts include economic diversification and higher incomes when a country moves into manufacturing and services. Negative impacts can include unemployment and social problems when sectors decline (e.g. de‑industrialisation), and environmental degradation due to industrial growth or resource exploitation."
+        },
+        {
+          question: "Identify three renewable energy sources and give one advantage of each.",
+          answer: "Solar power converts sunlight into electricity with no emissions and is widely available. Wind energy harnesses wind to drive turbines; it produces clean power once built. Hydroelectric power uses flowing water to generate electricity and can store energy in reservoirs, providing reliable base‑load supply."
+        }
+      ],
+      "Rural environments": [
+        {
+          question: "What does the exploitation of ecosystems in rural environments mean?",
+          answer: "It refers to the use of natural resources from ecosystems such as forests, soils and water for economic activities like agriculture, logging, mining and fishing. Over‑exploitation can lead to habitat loss, soil erosion, biodiversity decline and unsustainable resource depletion."
+        },
+        {
+          question: "Discuss two changes that may occur in rural areas due to migration or economic shifts.",
+          answer: "Rural‑to‑urban migration can lead to population decline and ageing communities, leaving fewer workers for agriculture. Alternatively, tourism or new industries may develop, bringing jobs and income but increasing housing demand and pressure on local services and the environment."
+        },
+        {
+          question: "Describe one challenge of balancing economic development with environmental protection in rural areas.",
+          answer: "Intensive farming and resource extraction boost economic output but can degrade soil, pollute water and reduce biodiversity. Balancing economic growth with conservation requires sustainable practices that protect natural capital while supporting livelihoods."
+        },
+        {
+          question: "Suggest two strategies that help create sustainable rural environments.",
+          answer: "Strategies include promoting conservation agriculture techniques (like crop rotation, reduced tillage and maintaining ground cover) to preserve soil and water, and developing eco‑tourism or agro‑forestry schemes that provide income while protecting ecosystems. Community‑based resource management and education also support sustainability."
+        },
+        {
+          question: "What are the general characteristics of rural areas?",
+          answer: "Rural areas typically have low population density, small settlements such as villages, and landscapes dominated by agriculture, forestry or natural vegetation. Access to services and infrastructure is often limited compared with urban areas."
+        }
+      ],
+      "Urban environments": [
+        {
+          question: "Define urbanisation and explain one cause of rapid urban growth.",
+          answer: "Urbanisation is the increasing proportion of a population living in urban areas. One cause is rural‑to‑urban migration, where people move to cities seeking employment, better services and a higher standard of living. Natural population growth in cities also contributes."
+        },
+        {
+          question: "What is a megacity and give one example.",
+          answer: "A megacity is an urban area with a population of more than 10 million. Examples include Tokyo, Delhi, Shanghai and São Paulo."
+        },
+        {
+          question: "Name two social challenges associated with urban growth and suggest one solution for each.",
+          answer: "Housing shortages can lead to overcrowding and slums; solutions include developing affordable housing and upgrading informal settlements. Traffic congestion causes pollution and delays; investing in efficient public transport systems and encouraging cycling and walking can help."
+        },
+        {
+          question: "Identify two environmental issues linked to urbanisation.",
+          answer: "Air pollution from vehicles and industry degrades air quality and harms health. Loss of green space for development leads to urban heat island effects, biodiversity loss and increased flood risk."
+        },
+        {
+          question: "Describe one sustainable strategy to manage urban areas.",
+          answer: "Creating green belts and urban parks preserves open space, supports biodiversity and provides recreational areas. Integrating efficient public transport, cycling lanes and pedestrian zones reduces dependence on cars, cuts emissions and improves quality of life."
+        }
+      ],
+      "Fragile environments and climate change": [
+        {
+          question: "What is a fragile environment? Give one example and explain why it is vulnerable.",
+          answer: "A fragile environment is an ecosystem that is easily disturbed and slow to recover from damage. Tropical rainforests are fragile because deforestation removes nutrient‑rich topsoil and disrupts the closed nutrient cycle, leading to loss of biodiversity and long‑term soil degradation."
+        },
+        {
+          question: "Explain the process of desertification and mention one region where it is occurring.",
+          answer: "Desertification is the degradation of land in arid and semi‑arid areas caused by factors like overgrazing, deforestation, unsustainable farming, and climate change. These pressures reduce vegetation cover and soil fertility. It is occurring in the Sahel region of Africa, where population pressures and changing rainfall patterns have led to the spread of desert conditions."
+        },
+        {
+          question: "Describe two impacts of climate change on fragile environments.",
+          answer: "Climate change can cause more frequent droughts and extreme temperatures, stressing plants and animals. Rising sea levels threaten coastal wetlands, mangroves and low‑lying islands with increased flooding and salinisation."
+        },
+        {
+          question: "What are two ways to combat deforestation and protect fragile ecosystems?",
+          answer: "Strategies include enforcing sustainable forestry practices such as selective logging and reduced‑impact harvesting, and implementing reforestation and afforestation programmes. Establishing protected areas, promoting agro‑forestry and providing alternative livelihoods for local people also help conserve forests."
+        },
+        {
+          question: "How can people adapt to the impacts of climate change in fragile environments?",
+          answer: "Adaptation measures include conserving water and using drought‑resistant crops, diversifying incomes, and building resilient infrastructure. Early‑warning systems and community education help prepare for extreme weather events, while restoring ecosystems like mangroves can buffer against storms and sea‑level rise."
+        }
+      ],
+      "Globalisation and migration": [
+        {
+          question: "Define globalisation and mention two factors that have accelerated it.",
+          answer: "Globalisation is the increasing interconnectedness of countries through trade, investment, communication and cultural exchange. Advances in transport (such as container shipping and jet aircraft) and information technology (like the internet and mobile communications) have accelerated globalisation by making it easier and cheaper to move goods, people and information across borders."
+        },
+        {
+          question: "Give one positive and one negative impact of globalisation on a developing country.",
+          answer: "A positive impact is increased foreign investment and job creation that can boost economic growth. A negative impact is that transnational companies may exploit cheap labour and lax environmental regulations, leading to low wages and pollution."
+        },
+        {
+          question: "Explain the difference between voluntary and forced migration and provide an example of each.",
+          answer: "Voluntary migration occurs when people choose to move, often for work or education, such as a skilled worker moving abroad for a job. Forced migration happens when people have no choice but to leave because of conflict, persecution or disasters, such as Syrian refugees fleeing civil war."
+        },
+        {
+          question: "What are two challenges that destination countries face due to increased migration?",
+          answer: "Destination countries may experience pressure on housing, healthcare and education services as populations grow. There can also be social tensions if integration policies are inadequate or if immigrants face discrimination, and competition for jobs may cause conflicts."
+        },
+        {
+          question: "Suggest two policies that can help manage tourism sustainably in a globalised context.",
+          answer: "Introducing visitor caps or permit systems can limit the number of tourists in sensitive areas, reducing environmental damage. Promoting eco‑tourism and encouraging visitors to support local businesses spreads economic benefits while raising awareness of environmental protection."
+        }
+      ],
+      "Development and human welfare": [
+        {
+          question: "Describe two indicators used to measure development and human welfare.",
+          answer: "GDP per capita measures the average economic output per person but does not capture inequality. The Human Development Index (HDI) combines life expectancy, education levels and per‑capita income to provide a broader measure of welfare. Other indicators include literacy rates, infant mortality, access to clean water and the Gender Inequality Index."
+        },
+        {
+          question: "Why might GDP alone be an inadequate measure of development?",
+          answer: "GDP alone fails to reflect how wealth is distributed or whether people enjoy good health and education. A country with a high GDP may still have significant poverty and inequality. Non‑economic factors such as human rights, environmental quality and quality of life are also important aspects of development."
+        },
+        {
+          question: "Identify two reasons for uneven development between countries.",
+          answer: "Historical factors like colonialism and exploitation can leave countries with weak economies and poor infrastructure. Geographical factors such as landlocked locations, harsh climates or limited resources can hinder trade and development. Political instability and corruption also impede development."
+        },
+        {
+          question: "Name one strategy to reduce global disparities and improve human welfare.",
+          answer: "Strategies include providing fair trade agreements that ensure producers receive a reasonable price for goods, offering debt relief to heavily indebted countries, investing in education and healthcare, and supporting the United Nations Sustainable Development Goals to tackle poverty, inequality and environmental degradation."
+        },
+        {
+          question: "Explain the concept of sustainable development.",
+          answer: "Sustainable development is development that meets the needs of the present without compromising the ability of future generations to meet their own needs. It involves balancing economic growth with social inclusion and environmental protection to ensure long‑term well‑being for people and the planet."
+        }
+      ]
+    };
+
+    // List of common English stop words to remove before comparing answers
+    const stopWords = [
+      'the','a','an','and','of','to','in','on','at','for','with','by','from','up','down','is','are','was','were','be','been','being','it','as','that','this','these','those','but','so','or','if','then','than','into','about','such','also','its','their','there','have','has','had','do','does','did','because','which','who','whom','what','when','where','why','how'
+    ];
+
+    /**
+     * Tokenise a string into an array of important words.
+     * Removes punctuation, converts to lowercase and filters out short or stop words.
+     */
+    function tokenize(text) {
+      return text
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, '')
+        .split(/\s+/)
+        .filter(word => word.length > 2 && !stopWords.includes(word));
+    }
+
+    /**
+     * Evaluate the student's answer by comparing keywords with the expected answer.
+     * Returns a score between 0 and 1 representing the proportion of keywords matched.
+     */
+    function evaluateAnswer(userAnswer, expectedAnswer) {
+      const userWords = tokenize(userAnswer);
+      const expectedWords = tokenize(expectedAnswer);
+      if (userWords.length === 0 || expectedWords.length === 0) return 0;
+      let matches = 0;
+      // Count how many of the student's words appear in the expected answer
+      userWords.forEach(word => {
+        if (expectedWords.includes(word)) matches += 1;
+      });
+      return matches / userWords.length;
+    }
+
+    /**
+     * Generate a feedback message based on the similarity score.
+     */
+    function generateFeedback(score) {
+      if (score >= 0.6) {
+        return {
+          message: 'Great job! Your answer covered many of the key points.',
+          success: true
+        };
+      } else if (score >= 0.4) {
+        return {
+          message: 'Decent attempt, but you missed some important details. Review the model answer to improve.',
+          success: false
+        };
+      }
+      return {
+        message: 'This answer could be improved. Make sure you mention the main concepts.',
+        success: false
+      };
+    }
+
+    // Populate the list of topics
+    const topicList = document.getElementById("topicList");
+    Object.keys(data).forEach(topic => {
+      const li = document.createElement("li");
+      li.textContent = topic;
+      li.addEventListener("click", () => displayQuestions(topic));
+      topicList.appendChild(li);
+    });
+
+    // Display the home page with instructions
+    function displayHome() {
+      const container = document.getElementById("questionsContainer");
+      container.innerHTML = "";
+      const heading = document.createElement("h2");
+      heading.textContent = "Welcome to your Geography Retrieval Practice";
+      const intro = document.createElement("p");
+      intro.textContent = "Follow these steps to make the most of your revision:";
+      const list = document.createElement("ol");
+      const steps = [
+        "Click on a topic from the menu on the left.",
+        "Read each question carefully and type your best answer in the box.",
+        "Click \"Check Answer\" to see how close you are.",
+        "If you need help, click \"Show Model Answer\" to read a full answer.",
+        "Hide the model answer and improve your own response – check again until your feedback box turns green.",
+        "Once your feedback is green, move on to the next question!"
+      ];
+      steps.forEach(step => {
+        const li = document.createElement("li");
+        li.textContent = step;
+        list.appendChild(li);
+      });
+      container.appendChild(heading);
+      container.appendChild(intro);
+      container.appendChild(list);
+    }
+
+    // Display questions for the selected topic
+    function displayQuestions(topic) {
+      const container = document.getElementById("questionsContainer");
+      container.innerHTML = ""; // Clear previous content
+      const questions = data[topic];
+      const heading = document.createElement("h2");
+      heading.textContent = topic;
+      container.appendChild(heading);
+      questions.forEach((item, index) => {
+        const card = document.createElement("div");
+        card.className = "question-card";
+        // Question text
+        const q = document.createElement("p");
+        q.className = "question";
+        q.textContent = `Q${index + 1}. ${item.question}`;
+        // Text area for the student's answer
+        const input = document.createElement("textarea");
+        input.rows = 3;
+        input.placeholder = "Type your answer here";
+        // Feedback element
+        const feedback = document.createElement("p");
+        feedback.className = "feedback";
+        feedback.style.display = "none";
+        // Button to check the answer
+        const checkBtn = document.createElement("button");
+        checkBtn.textContent = "Check Answer";
+        checkBtn.addEventListener("click", () => {
+          const userAns = input.value.trim();
+          // Evaluate only if user has entered something
+          if (!userAns) {
+            feedback.textContent = 'Please enter your answer before checking.';
+            feedback.style.display = 'block';
+            feedback.style.color = '#dc3545';
+            input.style.borderColor = '#dc3545';
+            return;
+          }
+          const score = evaluateAnswer(userAns, item.answer);
+          const result = generateFeedback(score);
+          feedback.textContent = result.message;
+          feedback.style.display = 'block';
+          if (result.success) {
+            feedback.style.color = '#155724';
+            feedback.style.backgroundColor = '#d4edda';
+            feedback.style.borderLeft = '4px solid #28a745';
+            input.style.borderColor = '#28a745';
+          } else {
+            feedback.style.color = '#721c24';
+            feedback.style.backgroundColor = '#f8d7da';
+            feedback.style.borderLeft = '4px solid #dc3545';
+            input.style.borderColor = '#dc3545';
+          }
+        });
+        // Button to toggle model answer
+        const toggleBtn = document.createElement("button");
+        toggleBtn.textContent = "Show Model Answer";
+        toggleBtn.addEventListener("click", () => {
+          const ans = card.querySelector(".answer");
+          if (ans.style.display === 'none' || ans.style.display === '') {
+            ans.style.display = 'block';
+            toggleBtn.textContent = 'Hide Model Answer';
+          } else {
+            ans.style.display = 'none';
+            toggleBtn.textContent = 'Show Model Answer';
+          }
+        });
+        // Hidden model answer element
+        const answer = document.createElement("p");
+        answer.className = "answer";
+        answer.textContent = item.answer;
+        answer.style.display = 'none';
+        // Append all elements to the card
+        card.appendChild(q);
+        card.appendChild(input);
+        card.appendChild(checkBtn);
+        card.appendChild(toggleBtn);
+        card.appendChild(feedback);
+        card.appendChild(answer);
+        container.appendChild(card);
+      });
+    }
+
+    // Set up event listener for home logo to return to instructions
+    const homeLogo = document.getElementById("homeLogo");
+    if (homeLogo) {
+      homeLogo.addEventListener("click", () => {
+        displayHome();
+      });
+    }
+    // Show home instructions on initial load
+    displayHome();
+  </script>
+</body>
+</html>
